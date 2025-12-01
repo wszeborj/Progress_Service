@@ -1,0 +1,52 @@
+services:
+  web:
+    container_name: progress_service
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - 8300:8000
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+    networks:
+      - gateway_network
+      - internal_network
+
+  db:
+    image: postgres:17.0
+    container_name: db_progress_service
+    env_file:
+      - .env
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=course_service_db
+      - POSTGRES_PASSWORD=admin
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 30s
+      retries: 6
+    volumes:
+      - postgres:/data/postgres
+    networks:
+      - internal_network
+
+
+volumes:
+  postgres:
+
+networks:
+  gateway_network:
+    external: true
+    name: gateway_to_progress_service_network
+  internal_network:
+    driver: bridge
