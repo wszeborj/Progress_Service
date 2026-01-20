@@ -95,7 +95,6 @@ class Query:
             info: strawberry.Info,
             course_id: Optional[int] = None
     ) -> List[CourseCertificate]:
-        """Get all certificates for a user, optionally filtered by course."""
         db_session: AsyncSession = info.context["db_session"]
         stmt = select(CertificateModel).where(CertificateModel.user_id == user_id)
         if course_id:
@@ -112,7 +111,7 @@ class Query:
             course_id: int,
             info: strawberry.Info
     ) -> Optional[CourseCertificate]:
-        """Get a specific certificate for a user and course."""
+
         db_session: AsyncSession = info.context["db_session"]
         stmt = select(CertificateModel).where(
             and_(
@@ -130,7 +129,6 @@ class Query:
             user_id: int,
             info: strawberry.Info
     ) -> LearningStatistics:
-        """Get comprehensive learning statistics for a user."""
         db_session: AsyncSession = info.context["db_session"]
 
         # Total completed courses

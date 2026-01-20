@@ -24,7 +24,6 @@ class CourseCertificate:
 
     @classmethod
     def from_model(cls, model: CourseCertificateModel) -> "CourseCertificate":
-        """Convert SQLAlchemy model to Strawberry GraphQL type."""
         return cls(
             id=model.id,
             certificate_id=model.certificate_id,

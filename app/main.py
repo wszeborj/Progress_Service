@@ -24,8 +24,6 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     print("Stopping...")
 
-
-# Create FastAPI app
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Progress tracking service for online learning platform with GraphQL API",
@@ -45,14 +43,13 @@ app.add_middleware(
 # Create GraphQL schema
 schema = strawberry.Schema(query=Query, mutation=Mutation)
 
-# Create GraphQL router with context
+
 graphql_app = GraphQLRouter(
     schema, 
     graphiql=settings.graphql_playground,
     context_getter=get_context
 )
 
-# Mount GraphQL endpoint
 app.include_router(graphql_app, prefix=settings.graphql_path)
 
 
